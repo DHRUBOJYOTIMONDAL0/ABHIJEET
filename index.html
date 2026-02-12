@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine 💖</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    min-height:100vh;
+    background:linear-gradient(135deg,#ff4d6d,#ff8fab);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    color:white;
+    overflow:hidden;
+}
+
+.container{
+    width:92%;
+    max-width:520px;
+    padding:20px;
+    position:relative;
+    z-index:10;
+}
+
+/* ===== INTRO IMAGE ===== */
+.poster-img{
+    width:100%;
+    max-width:320px;
+    border-radius:20px;
+    margin-bottom:20px;
+}
+
+/* ===== BUTTONS ===== */
+button{
+    padding:10px 22px;
+    margin:8px;
+    border:none;
+    border-radius:25px;
+    font-size:0.9rem;
+    cursor:pointer;
+    transition:.3s;
+}
+
+button:hover{
+    transform:scale(1.05);
+}
+
+.yes{
+    background:white;
+    color:#ff4d6d;
+    font-weight:bold;
+}
+
+.no{
+    background:#ffccd5;
+    color:#ff4d6d;
+}
+
+/* ===== QUIZ ===== */
+.question-section{
+    display:none;
+}
+
+.question{
+    display:none;
+    animation:fade .5s ease;
+}
+
+.question-gif{
+    width:220px;
+    max-width:75vw;
+    margin:0 auto 15px;
+    display:block;
+}
+
+.option{
+    display:block;
+    width:95%;
+    margin:8px auto;
+    background:#ffe3ec;
+    color:#b5179e;
+}
+
+.correct{
+    background:#ff4d6d;
+    color:white;
+}
+
+.disabled{
+    background:#ccc;
+    color:#666;
+}
+
+#final{
+    display:none;
+    margin-top:20px;
+}
+
+#final h2{
+    font-size:1.6rem;
+    margin-bottom:15px;
+}
+
+#final p{
+    font-size:1.5rem;
+    margin-bottom:20px;
+}
+
+.animated-heart{
+    font-size:10rem;
+    display:inline-block;
+    animation:heartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat{
+    0%{transform:scale(1);}
+    25%{transform:scale(1.2);}
+    50%{transform:scale(1);}
+    100%{transform:scale(1);}
+}
+
+/* ===== FLOATING LOVE BACKGROUND ===== */
+.love{
+    position:fixed;
+    bottom:-60px;
+    font-size:20px;
+    pointer-events:none;
+    animation:floatLove linear forwards;
+}
+
+@keyframes floatLove{
+    0%{transform:translateY(0);opacity:0;}
+    20%{opacity:1;}
+    100%{transform:translateY(-120vh);opacity:0;}
+}
+
+@keyframes fade{
+    from{opacity:0;transform:scale(.95);}
+    to{opacity:1;transform:scale(1);}
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<!-- ================= INTRO PAGE ================= -->
+<div id="introPage">
+
+<img src="lovee.jpg" class="poster-img" alt="Valentine Poster">
+
+<h2 style="font-size:1.1rem;">
+❤️ 🤍 If you want to be my valentine forever ♾️ <br>
+you’ll have to answer all these questions??
+</h2>
+
+<button class="yes" onclick="startQuiz()">Yes 💖</button>
+<button class="no" onclick="noClicked()" id="noBtn">No</button>
+
+<p id="responseMessage" style="margin-top:12px;font-weight:bold;display:none;"></p>
+
+</div>
+
+<!-- ================= QUIZ SECTION ================= -->
+<div class="question-section" id="quizSection">
+
+<div class="question" id="q1" style="display:block;">
+<img src="love.gif" class="question-gif" alt="Love Animation">
+<p>Can you promise to laugh with me even when we’re old and farting together 💨?</p>
+<button class="yes" onclick="next('q2')">Yes 💖</button>
+<button class="no" id="escapeNo1">No 😏</button>
+</div>
+
+<div class="question" id="q2">
+<img src="love.gif" class="question-gif" alt="Love Animation">
+<p>☯️ In hard times, what keeps you strong about me?</p>
+<button class="option disabled" onclick="shake(this)">Love</button>
+<button class="option disabled" onclick="shake(this)">Loyalty</button>
+<button class="option disabled" onclick="shake(this)">Never give up</button>
+<button class="option correct" onclick="next('q3')">All of the above 💞</button>
+<button class="option disabled" onclick="shake(this)">None</button>
+</div>
+
+<div class="question" id="q3">
+<img src="love.gif" class="question-gif" alt="Love Animation">
+<p>✨ If the future surprises us, would you be ready to be the dad of my little Version??? 👶🏻</p>
+<button class="yes" onclick="next('q4')">Yes 🥰</button>
+<button class="no" id="escapeNo2">No 🙈</button>
+</div>
+
+<div class="question" id="q4">
+<img src="love.gif" class="question-gif" alt="Love Animation">
+<p>Will you be my Valentine forever? 💌</p>
+<button class="yes" onclick="finish()">Forever ♾️💘</button>
+<button class="no" id="escapeNo3">No other option 😜</button>
+</div>
+
+<div id="final">
+<div class="animated-heart">💖</div>
+<h2>💃 I KNEW YOU LOVE ME 🔥</h2>
+<p>💖 You're officially mine forever ♾️</p>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+/* INTRO NO BUTTON */
+let noStages = ["No", "Not at all", "Obviously not", "BIG NO"];
+let currentStage = 0;
+
+function noClicked(){
+    const btn = document.getElementById("noBtn");
+    const msg = document.getElementById("responseMessage");
+
+    currentStage++;
+
+    if(currentStage < noStages.length){
+        btn.innerText = noStages[currentStage];
+    }else{
+        btn.style.display="none";
+        msg.innerText="NO MEANS NO 😠";
+        msg.style.display="block";
+        setTimeout(()=>msg.style.display="none",4000);
+    }
+}
+
+/* START QUIZ */
+function startQuiz(){
+    document.getElementById("introPage").style.display="none";
+    document.getElementById("quizSection").style.display="block";
+}
+
+/* NEXT QUESTION */
+function next(id){
+    document.querySelectorAll('.question').forEach(q=>q.style.display='none');
+    document.getElementById(id).style.display='block';
+}
+
+/* ESCAPE NO BUTTON */
+function escape(btn){
+    function move(e){
+        e.preventDefault();
+        const x=Math.random()*(window.innerWidth-btn.offsetWidth-20);
+        const y=Math.random()*(window.innerHeight-btn.offsetHeight-20);
+        btn.style.position="fixed";
+        btn.style.left=x+"px";
+        btn.style.top=y+"px";
+    }
+    btn.addEventListener("pointerdown", move);
+}
+
+["escapeNo1","escapeNo2","escapeNo3"].forEach(id=>{
+    escape(document.getElementById(id));
+});
+
+/* SHAKE WRONG */
+function shake(el){
+    el.style.transform="translateX(10px)";
+    setTimeout(()=>el.style.transform="translateX(-10px)",100);
+    setTimeout(()=>el.style.transform="translateX(0)",200);
+}
+
+/* FINISH */
+function finish(){
+    document.querySelectorAll('.question').forEach(q=>q.style.display='none');
+    document.getElementById('final').style.display='block';
+}
+
+/* FLOATING LOVE */
+setInterval(()=>{
+    const l=document.createElement("div");
+    l.className="love";
+    l.textContent=Math.random()>0.5?"💖":"LOVE";
+    l.style.left=Math.random()*100+"vw";
+    l.style.fontSize=(18+Math.random()*15)+"px";
+    l.style.animationDuration=(6+Math.random()*4)+"s";
+    document.body.appendChild(l);
+    setTimeout(()=>l.remove(),10000);
+},400);
+
+</script>
+
+</body>
+</html>
